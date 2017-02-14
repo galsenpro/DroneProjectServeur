@@ -33,14 +33,14 @@ VM.setSpeed(3)
 
 print "Going towards first point for 30 seconds ..."
 point1 = LocationGlobalRelative(-35.361354, 149.165218, 20)
-VM.vehicule.goTo(point1)
+VM.goTo(point1, None)
 
 # sleep so we can see the change in map
 time.sleep(30)
 
 print "Going towards second point for 30 seconds (groundspeed set to 10 m/s) ..."
 point2 = LocationGlobalRelative(-35.363244, 149.168801, 20)
-VM.vehicule.goTo(point2, groundspeed=10)
+VM.goTo(point2, groundspeed=10)
 
 # sleep so we can see the change in map
 time.sleep(30)
