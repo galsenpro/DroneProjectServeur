@@ -10,7 +10,7 @@ collectiondrone = db.positiondrone
 collectionobjectif = db.positionobjectif
 
 
-def last_command():
+def last_command_afaire():
     cursor = list(collectionobjectif.find({"etat": "afaire"}).sort('dated', -1).limit(1))
 
     if len(cursor) > 0:
@@ -33,9 +33,16 @@ def insert_drone_gps(lng, lat):
     collectiondrone.insert_one(position)
 
 
+def set_command_encours(id):
+    collectionobjectif.update_one({"_id": id}, {'$set': {"etat": "encours"}})
+
+
 def main():
-    print(last_command())
-    print(nearest_command(41, 43))
+    command = last_command_afaire()
+    print(command)
+    # id = command['_id']
+    # set_command_encours(id)
+    # print(nearest_command(41, 43))
     s.enter(FREQUENCE, 1, main, ())
 
 
