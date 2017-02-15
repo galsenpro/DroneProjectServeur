@@ -1,10 +1,5 @@
-import sched
-import time
 from datetime import datetime
-
 from pymongo import MongoClient
-
-FREQUENCE = 5
 
 cl = MongoClient('mongodb://148.60.11.238:27018')
 db = cl.admin
@@ -41,17 +36,3 @@ def set_command_encours(id_cmd):
 
 def set_command_fait(id_cmd):
     collectionobjectif.update_one({"_id": id_cmd}, {'$set': {"etat": "fait"}})
-
-
-def main():
-    command = last_command_afaire()
-    print(command)
-    # id = command['_id']
-    # set_command_encours(id)
-    # print(nearest_command(41, 43))
-    s.enter(FREQUENCE, 1, main, ())
-
-
-s = sched.scheduler(time.time, time.sleep)
-s.enter(0, 1, main, ())
-s.run()
