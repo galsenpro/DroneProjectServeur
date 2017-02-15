@@ -1,5 +1,7 @@
-import sched, time
+import sched
+import time
 from datetime import datetime
+
 from pymongo import MongoClient
 
 FREQUENCE = 5
@@ -33,8 +35,12 @@ def insert_drone_gps(lng, lat):
     collectiondrone.insert_one(position)
 
 
-def set_command_encours(id):
-    collectionobjectif.update_one({"_id": id}, {'$set': {"etat": "encours"}})
+def set_command_encours(id_cmd):
+    collectionobjectif.update_one({"_id": id_cmd}, {'$set': {"etat": "encours"}})
+
+
+def set_command_fait(id_cmd):
+    collectionobjectif.update_one({"_id": id_cmd}, {'$set': {"etat": "fait"}})
 
 
 def main():
