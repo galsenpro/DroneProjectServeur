@@ -42,10 +42,10 @@ def goTo(point,groundspeed):
     global vehicule
     if not is_AlreadyFlying():
         arm_and_takeoff(20)
-        if not groundspeed:
-            vehicule.simple_goto(point)
-        else:
-            vehicule.simple_goto(point,groundspeed)
+    if not groundspeed:
+        vehicule.simple_goto(point)
+    else:
+        vehicule.simple_goto(point,groundspeed)
 
 def arm_and_takeoff(aTargetAltitude):
     global vehicule  # type: Vehicle
@@ -111,6 +111,7 @@ def get_distance_metres(aLocation1, aLocation2):
     """
     dlat = aLocation2.lat - aLocation1.lat
     dlong = aLocation2.lon - aLocation1.lon
+    dlong *= math.cos( aLocation2.lat * math.pi / 180.0 )
     return math.sqrt((dlat*dlat) + (dlong*dlong)) * 1.113195e5
 
 def RTLandFinish():
