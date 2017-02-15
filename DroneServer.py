@@ -4,9 +4,9 @@ import MongoManager as MM
 import VehiculeManager as VM
 import time
 import sched
-import argparse
+import argparse, google_earth_fly_link_file
 
-FREQUENCE = 10
+FREQUENCE = 0.2
 
 #parser le paramettre --connect protocole:ip:port
 parser = argparse.ArgumentParser(description='Commands vehicle using vehicle.simple_goto.')
@@ -17,11 +17,11 @@ connection_string = args.connect
 VM.ConnectToDrone(connection_string)
 
 def main():
-    # print("- - - GPS du Drone - - -")
-    # gps = VM.getGPSCoordonate()
-    # print(gps)
+    print("- - - GPS du Drone - - -")
+    gps = VM.getGPSCoordonate()
+    print(gps)
     # MM.insert_drone_gps(gps.lon, gps.lat)
-
+    google_earth_fly_link_file.GenerateKML(gps.lon,gps.lat,VM.getGPSCoordonate().alt,VM.vehicule.attitude.yaw,VM.vehicule.attitude.pitch)
     print("- - - Commande - - -")
     command = MM.last_command_afaire()
     print(command)
