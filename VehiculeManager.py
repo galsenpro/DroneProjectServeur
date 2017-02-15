@@ -8,7 +8,7 @@ vehicule = None # type: Vehicle
 def test_func():
     print("Hello!")
 
-
+# --connect tcp:127.0.0.1:5760
 def ConnectToDrone(connection_string):
     global vehicule
     # Start SITL if no connection string specified
