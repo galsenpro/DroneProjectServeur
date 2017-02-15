@@ -1,9 +1,13 @@
-from dronekit import Vehicle, connect, VehicleMode, LocationGlobalRelative
+import math
+from atk import CoordType
+
+from dronekit import Vehicle, connect, VehicleMode, LocationGlobalRelative,collections
 import time
 
 
 myvar = 42
 vehicule = None # type: Vehicle
+#coordonnee = collections.namedtuple('coordonnee', ['lon', 'lat'])
 
 def test_func():
     print("Hello!")
@@ -89,6 +93,25 @@ def setAltitude(alt):
     global vehicule  # type: Vehicle
     assert isinstance(vehicule, Vehicle)
     vehicule.location.global_relative_frame.alt = alt
+
+#Fonction to get the GPS location
+def getGPSCoordonate():
+    global vehicule  # type: Vehicle
+    assert isinstance(vehicule, Vehicle)
+
+    return vehicule.location.global_relative_frame
+
+def get_distance_metres(aLocation1, aLocation2):
+    """
+    Returns the ground distance in metres between two LocationGlobal objects.
+
+    This method is an approximation, and will not be accurate over large distances and close to the
+    earth's poles. It comes from the ArduPilot test code:
+    https://github.com/diydrones/ardupilot/blob/master/Tools/autotest/common.py
+    """
+    dlat = aLocation2.lat - aLocation1.lat
+    dlong = aLocation2.lon - aLocation1.lon
+    return math.sqrt((dlat*dlat) + (dlong*dlong)) * 1.113195e5
 
 def RTLandFinish():
     global vehicule  # type: Vehicle
