@@ -13,6 +13,7 @@ def test_func():
     print("Hello!")
 
 # --connect tcp:127.0.0.1:5760
+# /dev/ttyUSB0
 def ConnectToDrone(connection_string):
     global vehicule
     # Start SITL if no connection string specified
@@ -21,7 +22,7 @@ def ConnectToDrone(connection_string):
 
     # Connect to the Vehicle
     print 'Connecting to vehicle on: %s' % connection_string
-    vehicule = connect(connection_string, wait_ready=True)
+    vehicule = connect(connection_string, wait_ready=True, baud=57600)
 
     print 'is connected: %s' % vehicule
 
@@ -60,7 +61,7 @@ def arm_and_takeoff(aTargetAltitude):
     while not vehicule.is_armable:
         print " Waiting for vehicle to initialise..."
         time.sleep(1)
-
+    # time.sleep(10)
     print "Arming motors"
     # Copter should arm in GUIDED mode
     vehicule.mode = VehicleMode("GUIDED")
@@ -96,6 +97,12 @@ def setAltitude(alt):
 
 #Fonction to get the GPS location
 def getGPSCoordonate():
+    global vehicule  # type: Vehicle
+    assert isinstance(vehicule, Vehicle)
+
+    return vehicule.location.global_frame
+
+def getGPSCoordonateRelatif():
     global vehicule  # type: Vehicle
     assert isinstance(vehicule, Vehicle)
 

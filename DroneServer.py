@@ -4,7 +4,7 @@ import MongoManager as MM
 import VehiculeManager as VM
 import time
 import sched
-import argparse
+import argparse, google_earth_fly_link_file
 
 FREQUENCE = 1
 
@@ -27,6 +27,8 @@ def main():
 
     gps = VM.getGPSCoordonate()
     MM.insert_drone_gps(gps.lon, gps.lat)
+    google_earth_fly_link_file.GenerateKML(gps.lon, gps.lat, VM.getGPSCoordonate().alt, VM.vehicule.attitude.yaw,
+                                           VM.vehicule.attitude.pitch)
     print("GPS")
     print(gps)
 
