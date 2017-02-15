@@ -4,9 +4,17 @@ import MongoManager as MM
 import VehiculeManager as VM
 import time
 import sched
+import argparse
 
 FREQUENCE = 10
 
+#parser le paramettre --connect protocole:ip:port
+parser = argparse.ArgumentParser(description='Commands vehicle using vehicle.simple_goto.')
+parser.add_argument('--connect',
+                    help="Vehicle connection target string. If not specified, SITL automatically started and used.")
+args = parser.parse_args()
+connection_string = args.connect
+VM.ConnectToDrone(connection_string)
 
 def main():
     # print("- - - GPS du Drone - - -")

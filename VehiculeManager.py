@@ -32,7 +32,7 @@ def is_AlreadyFlying():
     # altitude par rapport a la position de depart, si elle est au dessus du sol
     global vehicule # type: Vehicle
     assert isinstance(vehicule,Vehicle)
-    if( vehicule.armed and vehicule.location.global_relative_frame.alt > 15):
+    if( vehicule.armed and vehicule.location.global_relative_frame.alt > 5):
         #deja en vol
         return True
     else:
@@ -41,7 +41,7 @@ def is_AlreadyFlying():
 def goTo(point,groundspeed):
     global vehicule
     if not is_AlreadyFlying():
-        arm_and_takeoff(10)
+        arm_and_takeoff(20)
         if not groundspeed:
             vehicule.simple_goto(point)
         else:
