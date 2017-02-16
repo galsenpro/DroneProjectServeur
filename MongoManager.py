@@ -2,7 +2,7 @@ from datetime import datetime
 from pymongo import MongoClient
 
 cl = MongoClient('mongodb://148.60.11.238:27018')
-db = cl.admin
+db = cl.db
 collectiondrone = db.positiondrone
 collectionobjectif = db.positionobjectif
 
