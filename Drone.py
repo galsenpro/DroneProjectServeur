@@ -92,6 +92,8 @@ class Drone():
         value['position'] = [position.lat, position.lon]
         RM.post_position(value)
 
+    #def flux_video(self):
+
     """def thread_position(self):
         while True:
             self.notifier_serveur_position()
@@ -102,7 +104,25 @@ class Drone():
             self.flux_video()
             time.sleep()"""
 
+
 class Thread_position(Thread):
+    def __init__(self,drone,refresh = 5.0):
+        super(Thread_position, self).__init__()
+        self.drone = drone
+        self.refresh = refresh
+        self._stopevent = Event()
+
+    def run(self):
+        while not self._stopevent.isSet():
+            self.drone.notifier_serveur_position()
+            self._stopevent.wait(self.refresh)
+        print("thread position terminé")
+
+    def stop(self):
+        self._stopevent.set()
+
+
+"""class Thread_video(Thread):
     def __init__(self,drone,refresh = 5.0):
         self.drone = drone
         self._stopevent = Event()
@@ -110,11 +130,11 @@ class Thread_position(Thread):
 
     def run(self):
         while not self._stopevent.isSet():
-            self.drone.notifier_serveur_position()
+            self.drone.flux_video()
             self._stopevent.wait(self.refresh)
 
     def stop(self):
-        self._stopevent.set()
+        self._stopevent.set()"""
 
 def get_distance_metres(aLocation1, aLocation2):
     """
