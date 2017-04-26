@@ -1,4 +1,4 @@
-from Drone import Drone
+import Drone
 from dronekit import LocationGlobalRelative
 
 class ParcoursSegment():
