@@ -13,14 +13,10 @@ def get_drone(id_intervention):
     res = requests.get(pathRest+'drones/'+id_intervention+'/intervention')
     return res.json()
 
-"""def post_photo(value):
-    requests.post(path+'photo',data = value)"""
+def post_position(position, id_intervention):
+    value = {"position": [position[0],position[1]], "idintervention": id_intervention}
+    requests.post(path+'positiondrone',data = value)
 
-def post_photo(position,date_heure,nom,path,position_pts):
-    value = {}
-    value['position'] = position
-    value['path'] = path
-    value['date_heure'] = date_heure
-    value['nom'] = nom
-    value['position_pts'] = position_pts
-    requests.post(pathRest+'photo',data = value)
+def post_photo(position, dateheure, nom, path, positionPTS, id_intervention):
+    value = {"position": [position[0],position[1]], "date_heure": dateheure, "nom": nom, "path": path, "positionPTS": [positionPTS[0],positionPTS[1]], "idintervention": id_intervention}
+    requests.post(path + 'photo', data=value)
