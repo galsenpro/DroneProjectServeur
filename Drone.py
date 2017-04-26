@@ -2,6 +2,7 @@ from dronekit import connect, VehicleMode
 import time
 import math
 import RestManager as RM
+from threading import Thread,Event
 
 class Drone():
 
@@ -90,8 +91,30 @@ class Drone():
         position = self.getGPSCoordonate()
         value['position'] = [position.lat, position.lon]
         RM.post_position(value)
-        #requests.post('http://148.60.11.238:8080/positiondrone',data = value)
 
+    """def thread_position(self):
+        while True:
+            self.notifier_serveur_position()
+            time.sleep(5)
+
+    def thread_video(self):
+        while True:
+            self.flux_video()
+            time.sleep()"""
+
+class Thread_position(Thread):
+    def __init__(self,drone,refresh = 5.0):
+        self.drone = drone
+        self._stopevent = Event()
+        self.refresh = refresh
+
+    def run(self):
+        while not self._stopevent.isSet():
+            self.drone.notifier_serveur_position()
+            self._stopevent.wait(self.refresh)
+
+    def stop(self):
+        self._stopevent.set()
 
 def get_distance_metres(aLocation1, aLocation2):
     """
