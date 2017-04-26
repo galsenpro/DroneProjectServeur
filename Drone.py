@@ -1,8 +1,7 @@
-from dronekit import connect, LocationGlobalRelative, VehicleMode
+from dronekit import connect, VehicleMode
 import time
 import math
-import requests
-import RestManager
+import RestManager as RM
 
 class Drone():
 
@@ -11,7 +10,6 @@ class Drone():
         self.arm_and_takeoff(altitude)
         self.set_etat('STOP')
         self.id_intervention = 'test'
-        self.RM = RestManager()
 
     def set_intervention(self,id_intervention):
         self.id_intervention = id_intervention
@@ -91,7 +89,7 @@ class Drone():
         value['id_intervention'] = self.id_intervention
         position = self.getGPSCoordonate()
         value['position'] = [position.lat, position.lon]
-        self.RM.post_position(value)
+        RM.post_position(value)
         #requests.post('http://148.60.11.238:8080/positiondrone',data = value)
 
 
