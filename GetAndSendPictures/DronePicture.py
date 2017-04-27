@@ -1,5 +1,15 @@
 #-*- coding: utf-8 -*-
-from Modules.DroneModules import *
+import datetime
+import time
+import os
+import errno
+import sys
+import gtk.gdk
+try:
+    import chilkat
+    # Module pour le ssh - scp - et commande sur le serveur
+except ImportError:
+    os.system("python installChilkat.py")
 
 class DronePicture:
     """
