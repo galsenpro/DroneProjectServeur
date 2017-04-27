@@ -6,17 +6,18 @@ from threading import Thread,Event
 
 class Drone():
 
-    def __init__(self,connection_string = 'tcp:127.0.0.1:5760',altitude = 20):
+    def __init__(self,connection_string = 'tcp:127.0.0.1:5760',altitude = 20,id_intervention = "", positionIntervention = [40.76793169992044, -73.98180484771729]):
         self.drone = connect(connection_string, wait_ready = True, baud = 57600)
         self.arm_and_takeoff(altitude)
         self.set_etat('STOP')
-        self.id_intervention = 'test'
+        self.id_intervention = id_intervention
+        self.positionIntervention = positionIntervention
 
     def set_intervention(self,id_intervention):
         self.id_intervention = id_intervention
 
     def set_etat(self,etat):
-        #pour le moment pas de vérifications
+        #pour le moment pas de verifications
         self.etat = etat
 
     def is_AlreadyFlying(self):
@@ -36,7 +37,7 @@ class Drone():
         else:
             self.drone.simple_goto(point, groundspeed)
 
-    def arm_and_takeoff(self,aTargetAltitude):
+    def arm_and_takeoff(self,aTargetAltitude=20):
         while not self.drone.is_armable:
             print('waiting initialisation...')
             time.sleep(1)
@@ -83,7 +84,7 @@ class Drone():
     def attente_arrivee(self,destination):
         while get_distance_metres(self.getGPSCoordonate(),destination)>1:
             time.sleep(1)
-        print('arrivée à destination :'+str(destination))
+        print('arrivee a destination :'+str(destination))
 
     def notifier_serveur_position(self):
         #value = {}
@@ -116,7 +117,7 @@ class Thread_position(Thread):
         while not self._stopevent.isSet():
             self.drone.notifier_serveur_position()
             self._stopevent.wait(self.refresh)
-        print("thread position terminé")
+        print("thread position termine")
 
     def stop(self):
         self._stopevent.set()

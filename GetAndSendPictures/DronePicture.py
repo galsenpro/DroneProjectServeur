@@ -24,7 +24,7 @@ class DronePicture:
             value["position"]
             value["position_pts"]
     """
-    def createPicture(self, NamePicture = "Drone", Intervention = 1, Extension = "png"):
+    def createPicture(self, NamePicture = "Drone", Intervention = 1, Extension = "jpeg"):
         try:
             value = {}
             print("Drone Project : Creating picture ...")
@@ -37,6 +37,7 @@ class DronePicture:
             if (pb != None):
                 datepicture = str(datetime.datetime.utcnow().strftime("%Y%m%d%H%M%S%Z"))
                 filename = "./"+str(Intervention)+"/"+str(NamePicture)+"_"+str(datepicture)+"."+str(Extension)
+
                 if not os.path.exists(os.path.dirname(filename)):
                     try:
                         os.makedirs(os.path.dirname(filename))
@@ -47,8 +48,9 @@ class DronePicture:
                 value["path"] = filename
                 value["date_heure"] = datepicture
                 value["nom"] = NamePicture
-                print "Screenshot saved to " + str(NamePicture)+"."+str(Extension)
+                print "Screenshot saved to " + os.path.basename(filename)
                 print(value)
+                self.sendBySCP(filename)
                 return value
             else:
                 print "Unable to get the screenshot."
@@ -60,17 +62,57 @@ class DronePicture:
     def notifyNodeJS(self):
         try:
             print("Notifying NodeJS for new Photo Object ...")
+
         except Exception as x:
             print(x)
 
     """
         Posting the generated picture to the Apache server
     """
-    def postPicture(self):
-        try:
-            print("Posting the generated picture to apache server ...")
-        except Exception as x:
-            print(x)
+    def sendBySCP(self, localPath):
+        import sys
+        import chilkat
+        #  Important: It is helpful to send the contents of the
+        #  ssh.LastErrorText property when requesting support.
+        ssh = chilkat.CkSsh()
+        remotePath = "/var/www/html/projet/" + str(os.path.basename(localPath))
+        #  Any string automatically begins a fully-functional 30-day trial.
+        success = ssh.UnlockComponent("30-day trial")
+        if (success != True):
+            print(ssh.lastErrorText())
+            sys.exit()
+        # Connect to an SSH server:
+        #  Hostname may be an IP address or hostname:
+        hostname = "148.60.11.238"
+        port = 22
+
+        success = ssh.Connect(hostname, port)
+        if (success != True):
+            print(ssh.lastErrorText())
+            sys.exit()
+        # Wait a max of 5 seconds when reading responses..
+        ssh.put_IdleTimeoutMs(5000)
+        #  Authenticate using login/password:
+        success = ssh.AuthenticatePw("sitproject", "project")
+        if (success != True):
+            print(ssh.lastErrorText())
+            sys.exit()
+        # Once the SSH object is connected and authenticated, we use it
+        #  as the underlying transport in our SCP object.
+        scp = chilkat.CkScp()
+        success = scp.UseSsh(ssh)
+        if (success != True):
+            print(scp.lastErrorText())
+            sys.exit()
+        #remotePath = "/var/www/html/projet/test.txt"
+        #localPath = "/home/kirikou/test.txt"
+        success = scp.UploadFile(localPath, remotePath)
+        if (success != True):
+            print(scp.lastErrorText())
+            sys.exit()
+        print("SCP upload file success.")
+        #  Disconnect
+        ssh.Disconnect()
 
     """
         Fonction de prise de photos depuis un dossier
@@ -84,4 +126,4 @@ class DronePicture:
 
 dronepic = DronePicture()
 dronepic.createPicture()
-#dronepic.postPicture()
+#dronepic.sendBySCP()
