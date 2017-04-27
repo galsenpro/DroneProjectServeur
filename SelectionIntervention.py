@@ -44,6 +44,7 @@ print position
 #Start SITL if no connection string specified
 sitl = None
 import dronekit_sitl
+#démarage du tread SITL avec comme position
 sitl = dronekit_sitl.start_default(position[0],position[1]+0.0005)
 connection_string = sitl.connection_string()
 print  connection_string
@@ -51,16 +52,34 @@ print  connection_string
 # Connect to the Vehicle
 print 'Connecting to vehicle on: %s' % connection_string
 
-
+#connexion au drone
 drone = Drone(connection_string, id_intervention=idIntervention)
+
+#démarage du tread d'update de position
+tetat = Thread_position(drone)
+print('script start')
+tetat.start()
+
+drone_dernierEtat = "STOP"
+while True:
+    resDrone = RM.get_drone(drone.id_intervention)
+    if drone_dernierEtat != drone.etat:
+        drone_dernierEtat = drone.etat
+        if drone.etat == 'SEGMENT':
+            parcours = resDrone['segment']
+            # demarer un thread pour le segment
+        if drone.etat == 'ZONE':
+            pass
+            # demarer un thread pour la zone
+        if drone.etat == 'STOP':
+            drone.aller_a(drone.getGPSCoordonate())
+            # stopper les thread zone et segment
+        if drone.etat == 'PARKING':
+            drone.RTLandFinish()
 
 goto1 = LocationGlobalRelative(position[0], position[1]+0.0005, 20)
 goto2 = LocationGlobalRelative(position[0]+0.0006, position[1]-0.0010, 20)
 drone.arm_and_takeoff(20)
-
-tetat = Thread_position(drone)
-print('script start')
-tetat.start()
 
 while True:
     drone.aller_a(goto1)

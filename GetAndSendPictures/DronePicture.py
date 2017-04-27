@@ -5,11 +5,7 @@ import os
 import errno
 import sys
 import gtk.gdk
-try:
-    import chilkat
-    # Module pour le ssh - scp - et commande sur le serveur
-except ImportError:
-    os.system("python installChilkat.py")
+import chilkat
 
 class DronePicture:
     """
@@ -131,6 +127,19 @@ class DronePicture:
         except Exception as x:
             print(x)
 
+
+    """
+        Fonction de capture du flux Vidéo - TODO
+    """
+    def getVideoDrone(self):
+        try:
+            print("Flux vidéo ...")
+        except Exception as x:
+            print(x)
+
+    """
+    TESTS DE NOTRE MODULE
+    """
 #Création d'un objet dronepicture
 dronepic = DronePicture()
 #Génére un screeshot et l'envoi automatiquement vers le serveur apache
