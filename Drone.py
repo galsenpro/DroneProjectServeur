@@ -4,6 +4,7 @@ import math
 import RestManager as RM
 from threading import Thread,Event
 from pymavlink.mavutil import mavlink
+from GetAndSendPictures import DronePicture
 
 class Drone():
 
@@ -13,6 +14,9 @@ class Drone():
         self.set_etat('STOP')
         self.id_intervention = id_intervention
         self.positionIntervention = positionIntervention
+        self.destination = positionIntervention
+        # camera
+        self.camera = DronePicture()
 
     def set_intervention(self,id_intervention):
         self.id_intervention = id_intervention
@@ -31,6 +35,7 @@ class Drone():
             return False
 
     def aller_a(self,point,groundspeed=10):
+        self.destination = point
         if not self.is_AlreadyFlying():
             self.arm_and_takeoff(20.5)
         if not groundspeed:
@@ -97,7 +102,11 @@ class Drone():
     def notifier_serveur_position(self):
         RM.post_positionParam(self.getGPSCoordonate(),self.id_intervention)
 
-    #def flux_video(self):
+    def prendre_photo(self):
+        photo = self.camera.getPicture()
+        photo['position'] = self.getGPSCoordonate()
+        photo['id_intervention'] = self.id_intervention
+        photo['positionPTS'] = self.destination
 
     """def thread_position(self):
         while True:

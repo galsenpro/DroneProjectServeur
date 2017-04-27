@@ -10,6 +10,9 @@ def post_position(value):
     requests.post(pathRest+'positiondrone',data = value)
     #print "post_position: ", pathRest,' positiondrone ',value
 
+def post_photo(value):
+    requests.post(pathRest+'photo',data = value)
+
 def get_drone(id_intervention):
     res = requests.get(pathRest+'drones/'+id_intervention+'/intervention')
     return res.json()
