@@ -2,3 +2,5 @@ Modules:
 Image :
     pip install Image
 Module chilkat ssh : https://www.chilkatsoft.com/python.asp
+Module cv2
+    sudo pip install opencv-python
