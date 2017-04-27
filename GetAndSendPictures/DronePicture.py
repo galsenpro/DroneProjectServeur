@@ -131,11 +131,60 @@ class DronePicture:
     """
         Fonction de capture du flux Vidéo - TODO
     """
-    def getVideoDrone(self):
+    def makeVideoDrone(self, VideoName = "VideoDrone", Extension = "jpeg"):
         try:
             print("Flux vidéo ...")
+            w = gtk.gdk.get_default_root_window()
+            sz = w.get_size()
+            print ("The size of the window is %d x %d" % sz)
+            pb = gtk.gdk.Pixbuf(gtk.gdk.COLORSPACE_RGB, False, 8, sz[0], sz[1])
+            pb = pb.get_from_drawable(w, w.get_colormap(), 0, 0, 0, 0, sz[0], sz[1])
+            if (pb != None):
+                # Le temps actuel de la prise de photos
+                datepicture = str(datetime.datetime.utcnow().strftime("%Y%m%d%H%M%S%Z"))
+                racine = "./VideosDrone/"
+                suffix =  str(VideoName) + "." + str(Extension)
+                filename = racine + suffix
+                # Crée le fichier avec son arboresence même s'il n'existe pas
+                if not os.path.exists(os.path.dirname(filename)):
+                    try:
+                        os.makedirs(os.path.dirname(filename))
+                    except OSError as exc:  # Guard against race condition
+                        if exc.errno != errno.EEXIST:
+                            raise
+                # Sauvegarde de la photo prise avec l'extension indiquée
+                pb.save(filename, str(Extension))
+                print "Video saved to " + os.path.basename(filename)
+                self.sendToTheServer(filename, suffix)
+            else:
+                print "Unable to get the Video."
         except Exception as x:
             print(x)
+    """
+
+    def make_video(images, outimg=None, fps=5, size=None,
+                   is_color=True, format="XVID"):
+        
+        
+        import imread
+        from cv2 import VideoWriter, VideoWriter_fourcc, resize
+        fourcc = VideoWriter_fourcc(*format)
+        vid = None
+        for image in images:
+            if not os.path.exists(image):
+                raise FileNotFoundError(image)
+            img = imread(image)
+            if vid is None:
+                if size is None:
+                    size = img.shape[1], img.shape[0]
+                vid = VideoWriter(outvid, fourcc, float(fps), size, is_color)
+            if size[0] != img.shape[1] and size[1] != img.shape[0]:
+                img = resize(img, size)
+            vid.write(img)
+        vid.release()
+        return vid
+    """
+
 
     """
     TESTS DE NOTRE MODULE
@@ -146,7 +195,8 @@ dronepic = DronePicture()
 #valeur = dronepic.getPicture()
 while True:
     dronepic.getPicture()
+    dronepic.makeVideoDrone()
     #Pause
-    time.sleep(10)
+    time.sleep(5)
 #valeur est un objet json du Photo dans la base NodeJS
 #print(valeur)
