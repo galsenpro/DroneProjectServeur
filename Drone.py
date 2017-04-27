@@ -86,11 +86,11 @@ class Drone():
         print('arrivée à destination :'+str(destination))
 
     def notifier_serveur_position(self):
-        value = {}
-        value['id_intervention'] = self.id_intervention
+        #value = {}
+        #value['id_intervention'] = self.id_intervention
         position = self.getGPSCoordonate()
-        value['position'] = [position.lat, position.lon]
-        RM.post_position(value)
+        #value['position'] = [position.lat, position.lon]
+        RM.post_position([position.lat, position.lon],self.id_intervention)
 
     #def flux_video(self):
 
