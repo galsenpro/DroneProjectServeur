@@ -134,6 +134,7 @@ dronepic = DronePicture()
 #valeur = dronepic.getPicture()
 while True:
     dronepic.getPicture()
+    #Pause
     time.sleep(10)
 #valeur est un objet json du Photo dans la base NodeJS
 #print(valeur)
