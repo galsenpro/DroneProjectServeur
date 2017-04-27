@@ -86,6 +86,9 @@ class Drone():
             time.sleep(1)
         print('arrivee a destination :'+str(destination))
 
+    def orienter_vers_nord(self):
+        self.drone.
+
     def notifier_serveur_position(self):
         #value = {}
         #value['id_intervention'] = self.id_intervention
