@@ -1,9 +1,15 @@
 #-*- coding: utf-8 -*-
-
 import datetime
 import time
 import os
 import errno
+import sys
+import gtk.gdk
+try:
+    import chilkat
+    # Module pour le ssh - scp - et commande sur le serveur
+except ImportError:
+    os.system("python installChilkat.py")
 
 class DronePicture:
     """
@@ -28,7 +34,6 @@ class DronePicture:
         try:
             value = {}
             print("Drone Project : Creating picture ...")
-            import gtk.gdk
             w = gtk.gdk.get_default_root_window()
             sz = w.get_size()
             print ("The size of the window is %d x %d" % sz)
@@ -65,8 +70,6 @@ class DronePicture:
         Posting the generated picture to the Apache server
     """
     def sendToTheServer(self, localPath, suffix = None):
-        import sys
-        import chilkat
         #  Important: It is helpful to send the contents of the
         #  ssh.LastErrorText property when requesting support.
         ssh = chilkat.CkSsh()
