@@ -3,8 +3,11 @@
 
 
 import RestManager as RM
+from dronekit import LocationGlobalRelative
+from Drone import Drone
 
 #recup des différentes interventions
+
 print(RM.get_interventions())
 
 print("Récupérations des interventions")
@@ -31,3 +34,39 @@ var = raw_input("\n\r\nNuméro de l'intervention à sélectionner: ")
 print "intervention n°", var
 
 print interventions[int(var)]["_id"] # l'id de l'intervention
+print interventions[int(var)]
+
+idIntervention = interventions[int(var)]["_id"]
+position = interventions[int(var)]["position"]
+print position
+
+#Start SITL if no connection string specified
+sitl = None
+import dronekit_sitl
+sitl = dronekit_sitl.start_default(position[0],position[1]+0.0005)
+connection_string = sitl.connection_string()
+print  connection_string
+
+# Connect to the Vehicle
+print 'Connecting to vehicle on: %s' % connection_string
+
+
+drone = Drone(connection_string, id_intervention=idIntervention)
+
+goto1 = LocationGlobalRelative(position[0], position[1]+0.0005, 20)
+goto2 = LocationGlobalRelative(position[0]+0.0006, position[1]-0.0010, 20)
+drone.arm_and_takeoff(20)
+while True:
+    drone.aller_a(goto1)
+    drone.attente_arrivee(goto1)
+    print drone.getGPSCoordonate()
+    drone.notifier_serveur_position()
+
+    drone.aller_a(goto2)
+    drone.attente_arrivee(goto2)
+    print drone.getGPSCoordonate()
+    drone.notifier_serveur_position()
+
+
+if sitl is not None:
+    sitl.stop()
