@@ -14,7 +14,7 @@ def get_drone(id_intervention):
     return res.json()
 
 def post_position(position, id_intervention):
-    value = {"position": [position[0],position[1]], "idintervention": id_intervention}
+    value = {"position": [position[0],position[1]], "idIntervention": id_intervention}
     requests.post(pathRest+'positiondrone',data = value)
 
 def post_photo(position, dateheure, nom, path, positionPTS, id_intervention):
