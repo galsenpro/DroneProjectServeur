@@ -1,9 +1,9 @@
 from threading import Thread,Event
 
 
-class Thread_position(Thread):
+class ThreadVideo(Thread):
     def __init__(self,drone = None,refresh = 1.0):
-        super(Thread_position, self).__init__()
+        super(ThreadVideo, self).__init__()
         self.drone = drone
         self._stopevent = Event()
         self.refresh = refresh
