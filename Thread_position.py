@@ -1,12 +1,9 @@
 import os
 from threading import Thread,Event
-import RestManager as RM
 
 import sys
 
 from Drone import Drone
-#from ParcoursSegment import ParcoursSegment
-import RestManager as RM
 import time
 
 class Thread_position(Thread):
@@ -16,11 +13,10 @@ class Thread_position(Thread):
         self._stopevent = Event()
         self.refresh = refresh
 
-
     def run(self):
         id_inter = self.drone.id_intervention
         while not self._stopevent.isSet():
-            print "ThreadPosition: ", self.drone.getGPSCoordonate()
+            print("ThreadPosition: ", self.drone.getGPSCoordonate())
             self.drone.notifier_serveur_position()
             self._stopevent.wait(self.refresh)
         print('fin du thread')
@@ -43,7 +39,7 @@ if __name__ == '__main__':
     try:
         main()
     except KeyboardInterrupt:
-        print 'Interrupted'
+        print('Interrupted')
         try:
             sys.exit(0)
         except SystemExit:

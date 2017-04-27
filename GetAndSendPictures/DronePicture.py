@@ -56,7 +56,7 @@ class DronePicture:
                 print "Screenshot saved to " + os.path.basename(filename)
                 self.sendToTheServer(filename, suffix)
                 print(value)
-                #return value
+                return value
             else:
                 print "Unable to get the screenshot."
         except Exception as x:
@@ -189,7 +189,7 @@ class DronePicture:
     """
     TESTS DE NOTRE MODULE
     """
-#Création d'un objet dronepicture
+""""#Création d'un objet dronepicture
 dronepic = DronePicture()
 #Génére un screeshot et l'envoi automatiquement vers le serveur apache
 #valeur = dronepic.getPicture()
@@ -199,4 +199,4 @@ while True:
     #Pause
     time.sleep(5)
 #valeur est un objet json du Photo dans la base NodeJS
-#print(valeur)
+#print(valeur)"""

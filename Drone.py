@@ -4,7 +4,8 @@ import math
 import RestManager as RM
 from threading import Thread,Event
 from pymavlink.mavutil import mavlink
-from GetAndSendPictures import DronePicture
+from GetAndSendPictures.DronePicture import DronePicture
+
 
 class Drone():
 
@@ -94,32 +95,24 @@ class Drone():
 
     def orienter_vers_nord(self):
         msg = self.drone.message_factory.command_long_encode(0,0,mavlink.MAV_CMD_CONDITION_YAW,0,0,0,1,0,0,0,0)
-        print(msg)
+        #print(msg)
         self.drone.send_mavlink(msg)
-        time.sleep(5)
-        #self.drone.gimbal.rotate(self.drone.)
+        #time.sleep(5)
 
     def notifier_serveur_position(self):
         RM.post_positionParam(self.getGPSCoordonate(),self.id_intervention)
 
     def prendre_photo(self):
-        photo = self.camera.getPicture()
+        photo = self.camera.getPicture(Intervention = self.id_intervention)
         photo['position'] = self.getGPSCoordonate()
         photo['id_intervention'] = self.id_intervention
         photo['positionPTS'] = self.destination
+        RM.post_photo(photo)
 
-    """def thread_position(self):
-        while True:
-            self.notifier_serveur_position()
-            time.sleep(5)
+    def prendre_video(self):
+        self.camera.makeVideoDrone()
 
-    def thread_video(self):
-        while True:
-            self.flux_video()
-            time.sleep()"""
-
-
-class Thread_position(Thread):
+"""class Thread_position(Thread):
     def __init__(self,drone,refresh = 5.0):
         super(Thread_position, self).__init__()
         self.drone = drone
@@ -133,7 +126,7 @@ class Thread_position(Thread):
         print("thread position termine")
 
     def stop(self):
-        self._stopevent.set()
+        self._stopevent.set()"""
 
 
 """class Thread_video(Thread):
