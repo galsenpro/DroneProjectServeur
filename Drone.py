@@ -90,11 +90,7 @@ class Drone():
         self.drone.
 
     def notifier_serveur_position(self):
-        #value = {}
-        #value['id_intervention'] = self.id_intervention
-        position = self.getGPSCoordonate()
-        #value['position'] = [position.lat, position.lon]
-        RM.post_position([position.lat, position.lon],self.id_intervention)
+        RM.post_positionParam(self.getGPSCoordonate(),self.id_intervention)
 
     #def flux_video(self):
 
