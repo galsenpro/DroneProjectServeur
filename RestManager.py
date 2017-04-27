@@ -8,7 +8,7 @@ def get_interventions():
 
 def post_position(value):
     requests.post(pathRest+'positiondrone',data = value)
-    print "post_position: ", pathRest,' positiondrone ',value
+    #print "post_position: ", pathRest,' positiondrone ',value
 
 def get_drone(id_intervention):
     res = requests.get(pathRest+'drones/'+id_intervention+'/intervention')
@@ -18,7 +18,7 @@ def post_positionParam(position, id_intervention):
     value = {}
     value['idIntervention'] = id_intervention
     value['position'] = [position.lat, position.lon]
-    print "Sending drone position ", position
+    #print "Sending drone position ", position
     requests.post(pathRest+'positiondrone',data = value)
 
 def post_photoParam(position, dateheure, nom, path, positionPTS, id_intervention):

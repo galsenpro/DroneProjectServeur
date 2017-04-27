@@ -3,6 +3,7 @@ import time
 import math
 import RestManager as RM
 from threading import Thread,Event
+from pymavlink.mavutil import mavlink
 
 class Drone():
 
@@ -87,7 +88,11 @@ class Drone():
         print('arrivee a destination :'+str(destination))
 
     def orienter_vers_nord(self):
-        self.drone.
+        msg = self.drone.message_factory.command_long_encode(0,0,mavlink.MAV_CMD_CONDITION_YAW,0,0,0,1,0,0,0,0)
+        print(msg)
+        self.drone.send_mavlink(msg)
+        time.sleep(5)
+        #self.drone.gimbal.rotate(self.drone.)
 
     def notifier_serveur_position(self):
         RM.post_positionParam(self.getGPSCoordonate(),self.id_intervention)

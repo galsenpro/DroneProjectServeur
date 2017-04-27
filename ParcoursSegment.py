@@ -32,6 +32,7 @@ class ParcoursSegment(Thread):
             point = self.points[parcours[count]]
             self.drone.aller_a(point,None)
             self.drone.attente_arrivee(point)
+            self.drone.orienter_vers_nord()
             count += 1
             if count == len(parcours):
                 count = 0
@@ -76,15 +77,15 @@ dronedb = RM.get_drone(id_intervention)
 parcours = dronedb['segment'].points
 boucle_fermee = dronedb['segment'].boucle_fermee"""
 test_parcours = ParcoursSegment(drone,parcours,boucle_fermee)
-test_position = Thread_position(drone)
+#test_position = Thread_position(drone)
 test_parcours.start()
-test_position.start()
+#test_position.start()
 
 #test_parcours.parcourir_segments()
 print('attente fin')
-time.sleep(30)
+time.sleep(120)
 test_parcours.stop()
-time.sleep(5)
-test_position.stop()
+#time.sleep(5)
+#test_position.stop()
 #test_parcours.stop_parcours()
 
