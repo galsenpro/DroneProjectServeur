@@ -4,3 +4,5 @@
 *.pyc
 
 *.jpeg
+
+Camera/camera_tmp\.kml

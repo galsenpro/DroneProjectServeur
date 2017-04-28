@@ -13,7 +13,6 @@ class ParcoursSegment(Thread):
         self.drone = drone
         self.points = points
         self.boucle_fermee = boucle_fermee
-        #self.drone.set_etat('SEGMENT')
         self._stopevent = Event()
 
     def run(self):
@@ -21,13 +20,10 @@ class ParcoursSegment(Thread):
         parcours = [idx for idx in range(0,len(self.points))]
         if not self.boucle_fermee:
             parcours += [idx for idx in range(len(self.points)-2,0,-1)]
-        # aller au départ
-        #print(str(self.points[0]))
         print("début de parcours")
         count = 0
         while not self._stopevent.isSet():
             point = self.points[parcours[count]]
-            #print(str(point))
             self.drone.aller_a(point,None)
             self.drone.attente_arrivee(point)
             self.drone.orienter_vers_nord()

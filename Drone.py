@@ -4,7 +4,7 @@ import math
 import RestManager as RM
 from pymavlink.mavutil import mavlink
 from GetAndSendPictures.DronePicture import DronePicture
-
+import google_earth_fly_link_file
 
 class Drone():
 
@@ -93,15 +93,12 @@ class Drone():
 
     def attente_arrivee(self,destination):
         while get_distance_metres(self.getGPSCoordonate(),LocationGlobalRelative(destination[0],destination[1]))>1:
-        #while get_distance_metres(self.getGPSCoordonate(),destination)>1:
             time.sleep(1)
         print('arrivee a destination :'+str(destination))
 
     def orienter_vers_nord(self):
         msg = self.drone.message_factory.command_long_encode(0,0,mavlink.MAV_CMD_CONDITION_YAW,0,0,0,1,0,0,0,0)
-        #print(msg)
         self.drone.send_mavlink(msg)
-        #time.sleep(5)
 
     def notifier_serveur_position(self):
         RM.post_positionParam(self.getGPSCoordonate(),self.id_intervention)
@@ -117,6 +114,11 @@ class Drone():
     def prendre_video(self):
         self.camera.makeVideoDrone(Intervention= self.id_intervention)
 
+    def maj_googleearth(self):
+        position = self.getGPSCoordonate()
+        google_earth_fly_link_file.GenerateKML(position.lon,position.lat,position.alt,
+                                               self.drone.attitude.yaw,self.drone.attitude.pitch)
+        #print('MAJ google earth')
 
 def get_distance_metres(aLocation1, aLocation2):
     """

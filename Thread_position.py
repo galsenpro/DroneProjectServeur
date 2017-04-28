@@ -18,6 +18,7 @@ class Thread_position(Thread):
         while not self._stopevent.isSet():
             #print("ThreadPosition: ", self.drone.getGPSCoordonate())
             self.drone.notifier_serveur_position()
+            self.drone.maj_googleearth()
             self._stopevent.wait(self.refresh)
         print('fin du thread')
 
