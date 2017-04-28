@@ -9,6 +9,7 @@ from ParcoursSegment import ParcoursSegment
 
 #recup des différentes interventions
 from Thread_position import Thread_position
+import time
 
 #print(RM.get_interventions())
 
@@ -84,6 +85,7 @@ while True:
             # stopper les thread zone et segment
         if drone.etat == 'PARKING':
             drone.RTLandFinish()
+    time.sleep(5)
 
 goto1 = LocationGlobalRelative(position[0], position[1]+0.0005, 20)
 goto2 = LocationGlobalRelative(position[0]+0.0006, position[1]-0.0010, 20)

@@ -17,6 +17,12 @@ def get_drone(id_intervention):
     res = requests.get(pathRest+'drones/'+id_intervention+'/intervention')
     return res.json()
 
+def create_drone(id_intervention):
+    value = {}
+    value['idIntervention'] = id_intervention
+    value['etat'] = 'STOP'
+    requests.post(pathRest+'drones',data = value)
+
 def post_positionParam(position, id_intervention):
     value = {}
     value['idIntervention'] = id_intervention

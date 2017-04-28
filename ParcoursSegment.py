@@ -40,28 +40,29 @@ class ParcoursSegment(Thread):
     def stop(self):
         self._stopevent.set()
 #test
-"""
-drone = Drone()
-#ISTIC = 48.114971,-1.636686,20,0
-parcours = []
-parcours.append(LocationGlobalRelative(48.115,-1.636,20))
-parcours.append(LocationGlobalRelative(48.1155,-1.6365,20))
-parcours.append(LocationGlobalRelative(48.1158,-1.6362,20))
-parcours.append(LocationGlobalRelative(48.1153,-1.6363,20))
-boucle_fermee = True
-drone.set_intervention('test_photo')
-test_parcours = ParcoursSegment(drone,parcours,boucle_fermee)
-#test_position = Thread_position(drone)
-#test_video = ThreadVideo(drone)
-test_parcours.start()
-#test_position.start()
-#test_video.start()
+if __name__ == '__main__':
 
-#test_parcours.parcourir_segments()
-print('attente fin')
-time.sleep(120)
-test_parcours.stop()
-#time.sleep(5)
-#test_position.stop()
-#test_video.stop()
-"""
+    drone = Drone()
+    #ISTIC = 48.114971,-1.636686,20,0
+    parcours = []
+    parcours.append(LocationGlobalRelative(48.115,-1.636,20))
+    parcours.append(LocationGlobalRelative(48.1155,-1.6365,20))
+    parcours.append(LocationGlobalRelative(48.1158,-1.6362,20))
+    parcours.append(LocationGlobalRelative(48.1153,-1.6363,20))
+    boucle_fermee = True
+    drone.set_intervention('test_photo')
+    test_parcours = ParcoursSegment(drone,parcours,boucle_fermee)
+    #test_position = Thread_position(drone)
+    #test_video = ThreadVideo(drone)
+    test_parcours.start()
+    #test_position.start()
+    #test_video.start()
+
+    #test_parcours.parcourir_segments()
+    print('attente fin')
+    time.sleep(120)
+    test_parcours.stop()
+    #time.sleep(5)
+    #test_position.stop()
+    #test_video.stop()
+
