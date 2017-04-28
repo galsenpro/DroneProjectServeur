@@ -16,7 +16,7 @@ class Thread_position(Thread):
     def run(self):
         id_inter = self.drone.id_intervention
         while not self._stopevent.isSet():
-            print("ThreadPosition: ", self.drone.getGPSCoordonate())
+            #print("ThreadPosition: ", self.drone.getGPSCoordonate())
             self.drone.notifier_serveur_position()
             self._stopevent.wait(self.refresh)
         print('fin du thread')

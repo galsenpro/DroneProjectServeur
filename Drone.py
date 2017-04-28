@@ -1,4 +1,4 @@
-from dronekit import connect, VehicleMode
+from dronekit import connect, VehicleMode,LocationGlobalRelative
 import time
 import math
 import RestManager as RM
@@ -36,13 +36,17 @@ class Drone():
             return False
 
     def aller_a(self,point,groundspeed=10):
-        self.destination = point
+        if isinstance(point,LocationGlobalRelative):
+            self.destination = point
+        else:
+            self.destination = LocationGlobalRelative(point[0],point[1],20)
+        #print(str(self.destination))
         if not self.is_AlreadyFlying():
             self.arm_and_takeoff(20.5)
         if not groundspeed:
-            self.drone.simple_goto(point)
+            self.drone.simple_goto(self.destination)
         else:
-            self.drone.simple_goto(point, groundspeed)
+            self.drone.simple_goto(self.destination, groundspeed)
 
     def arm_and_takeoff(self,aTargetAltitude=20):
         while not self.drone.is_armable:
@@ -89,7 +93,7 @@ class Drone():
         self.drone.close()
 
     def attente_arrivee(self,destination):
-        while get_distance_metres(self.getGPSCoordonate(),destination)>1:
+        while get_distance_metres(self.getGPSCoordonate(),LocationGlobalRelative(destination[0],destination[1]))>1:
             time.sleep(1)
         print('arrivee a destination :'+str(destination))
 
@@ -112,36 +116,6 @@ class Drone():
     def prendre_video(self):
         self.camera.makeVideoDrone()
 
-"""class Thread_position(Thread):
-    def __init__(self,drone,refresh = 5.0):
-        super(Thread_position, self).__init__()
-        self.drone = drone
-        self.refresh = refresh
-        self._stopevent = Event()
-
-    def run(self):
-        while not self._stopevent.isSet():
-            self.drone.notifier_serveur_position()
-            self._stopevent.wait(self.refresh)
-        print("thread position termine")
-
-    def stop(self):
-        self._stopevent.set()"""
-
-
-"""class Thread_video(Thread):
-    def __init__(self,drone,refresh = 5.0):
-        self.drone = drone
-        self._stopevent = Event()
-        self.refresh = refresh
-
-    def run(self):
-        while not self._stopevent.isSet():
-            self.drone.flux_video()
-            self._stopevent.wait(self.refresh)
-
-    def stop(self):
-        self._stopevent.set()"""
 
 def get_distance_metres(aLocation1, aLocation2):
     """

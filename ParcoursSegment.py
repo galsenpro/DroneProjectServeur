@@ -27,6 +27,7 @@ class ParcoursSegment(Thread):
         count = 0
         while not self._stopevent.isSet():
             point = self.points[parcours[count]]
+            #print(str(point))
             self.drone.aller_a(point,None)
             self.drone.attente_arrivee(point)
             self.drone.orienter_vers_nord()
@@ -39,10 +40,7 @@ class ParcoursSegment(Thread):
     def stop(self):
         self._stopevent.set()
 #test
-"""import dronekit_sitl
-sitl = dronekit_sitl.start_default()
-connection_string = sitl.connection_string()
-print(connection_string)"""
+"""
 drone = Drone()
 #ISTIC = 48.114971,-1.636686,20,0
 parcours = []
@@ -52,10 +50,6 @@ parcours.append(LocationGlobalRelative(48.1158,-1.6362,20))
 parcours.append(LocationGlobalRelative(48.1153,-1.6363,20))
 boucle_fermee = True
 drone.set_intervention('test_photo')
-"""id_intervention = 'test'
-dronedb = RM.get_drone(id_intervention)
-parcours = dronedb['segment'].points
-boucle_fermee = dronedb['segment'].boucle_fermee"""
 test_parcours = ParcoursSegment(drone,parcours,boucle_fermee)
 #test_position = Thread_position(drone)
 #test_video = ThreadVideo(drone)
@@ -70,4 +64,4 @@ test_parcours.stop()
 #time.sleep(5)
 #test_position.stop()
 #test_video.stop()
-
+"""
