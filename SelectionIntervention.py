@@ -9,6 +9,7 @@ from ParcoursSegment import ParcoursSegment
 
 #recup des différentes interventions
 from Thread_position import Thread_position
+from Thread_video import ThreadVideo
 import time
 
 #print(RM.get_interventions())
@@ -62,6 +63,8 @@ tetat = Thread_position(drone)
 print('script start')
 tetat.start()
 
+tvideo = ThreadVideo(drone)
+tvideo.start()
 drone_dernierEtat = "STOP"
 #thread de parcours (Segment ou Zone)
 ps = None
@@ -108,3 +111,4 @@ if sitl is not None:
     sitl.stop()
     print('script stop')
     tetat.stop()
+    tvideo.stop()

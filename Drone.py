@@ -92,7 +92,8 @@ class Drone():
         self.drone.close()
 
     def attente_arrivee(self,destination):
-        while get_distance_metres(self.getGPSCoordonate(),LocationGlobalRelative(destination.lat,destination.lon))>1:
+        while get_distance_metres(self.getGPSCoordonate(),LocationGlobalRelative(destination[0],destination[1]))>1:
+        #while get_distance_metres(self.getGPSCoordonate(),destination)>1:
             time.sleep(1)
         print('arrivee a destination :'+str(destination))
 
