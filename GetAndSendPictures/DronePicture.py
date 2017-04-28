@@ -107,8 +107,6 @@ class DronePicture:
         if (success != True):
             print(scp.lastErrorText())
             sys.exit()
-        #remotePath = "/var/www/html/projet/test.txt"
-        #localPath = "/home/kirikou/test.txt"
         success = scp.UploadFile(localPath, dstfolder)
         if (success != True):
             print(scp.lastErrorText())
@@ -131,7 +129,7 @@ class DronePicture:
     """
         Fonction de capture du flux Vidéo - TODO
     """
-    def makeVideoDrone(self, VideoName = "VideoDrone", Extension = "jpeg"):
+    def makeVideoDrone(self, VideoName = "VideoDrone", Intervention = 1, Extension = "jpeg"):
         try:
             print("Flux vidéo ...")
             w = gtk.gdk.get_default_root_window()
@@ -142,8 +140,8 @@ class DronePicture:
             if (pb != None):
                 # Le temps actuel de la prise de photos
                 datepicture = str(datetime.datetime.utcnow().strftime("%Y%m%d%H%M%S%Z"))
-                racine = "./VideosDrone/"
-                suffix =  str(VideoName) + "." + str(Extension)
+                racine = "./"
+                suffix =  str(Intervention)+"/VideosDrone/"+str(VideoName) + "." + str(Extension)
                 filename = racine + suffix
                 # Crée le fichier avec son arboresence même s'il n'existe pas
                 if not os.path.exists(os.path.dirname(filename)):
@@ -189,7 +187,7 @@ class DronePicture:
     """
     TESTS DE NOTRE MODULE
     """
-""""#Création d'un objet dronepicture
+#Création d'un objet dronepicture
 dronepic = DronePicture()
 #Génére un screeshot et l'envoi automatiquement vers le serveur apache
 #valeur = dronepic.getPicture()
