@@ -7,7 +7,7 @@ from Drone import Drone
 import time
 
 class Thread_position(Thread):
-    def __init__(self,drone = None,refresh = 1.0):
+    def __init__(self,drone = None,refresh = 2.0):
         super(Thread_position, self).__init__()
         self.drone = drone
         self._stopevent = Event()

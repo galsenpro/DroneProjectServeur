@@ -1,7 +1,7 @@
 #-*- coding: utf-8 -*-
 from Drone import Drone
 #from Thread_position import Thread_position
-#from Thread_video import ThreadVideo
+from Thread_video import ThreadVideo
 from dronekit import LocationGlobalRelative
 from threading import Thread,Event
 import time
@@ -50,19 +50,21 @@ if __name__ == '__main__':
     parcours.append(LocationGlobalRelative(48.1158,-1.6362,20))
     parcours.append(LocationGlobalRelative(48.1153,-1.6363,20))
     boucle_fermee = True
-    drone.set_intervention('test_photo')
+    # id_intervention = 'test_photo'
+    id_intervention = '58ddf785212566155e8e98ea'
+    drone.set_intervention(id_intervention)
     test_parcours = ParcoursSegment(drone,parcours,boucle_fermee)
     #test_position = Thread_position(drone)
-    #test_video = ThreadVideo(drone)
+    test_video = ThreadVideo(drone)
     test_parcours.start()
     #test_position.start()
-    #test_video.start()
+    test_video.start()
 
     #test_parcours.parcourir_segments()
     print('attente fin')
     time.sleep(120)
     test_parcours.stop()
-    #time.sleep(5)
+    time.sleep(5)
     #test_position.stop()
-    #test_video.stop()
+    test_video.stop()
 

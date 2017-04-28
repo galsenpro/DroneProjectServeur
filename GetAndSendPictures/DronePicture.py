@@ -141,7 +141,7 @@ class DronePicture:
                 # Le temps actuel de la prise de photos
                 datepicture = str(datetime.datetime.utcnow().strftime("%Y%m%d%H%M%S%Z"))
                 racine = "./"
-                suffix =  str(Intervention)+"/VideosDrone/"+str(VideoName) + "." + str(Extension)
+                suffix =  str(Intervention)+"/"+str(VideoName) + "." + str(Extension)
                 filename = racine + suffix
                 # Crée le fichier avec son arboresence même s'il n'existe pas
                 if not os.path.exists(os.path.dirname(filename)):
@@ -187,14 +187,16 @@ class DronePicture:
     """
     TESTS DE NOTRE MODULE
     """
-#Création d'un objet dronepicture
-dronepic = DronePicture()
-#Génére un screeshot et l'envoi automatiquement vers le serveur apache
-#valeur = dronepic.getPicture()
-while True:
-    dronepic.getPicture()
-    dronepic.makeVideoDrone()
-    #Pause
-    time.sleep(5)
-#valeur est un objet json du Photo dans la base NodeJS
-#print(valeur)"""
+
+if __name__ == '__main__':
+    #Création d'un objet dronepicture
+    dronepic = DronePicture()
+    #Génére un screeshot et l'envoi automatiquement vers le serveur apache
+    #valeur = dronepic.getPicture()
+    while True:
+        dronepic.getPicture()
+        dronepic.makeVideoDrone()
+        #Pause
+        time.sleep(5)
+    #valeur est un objet json du Photo dans la base NodeJS
+    #print(valeur)

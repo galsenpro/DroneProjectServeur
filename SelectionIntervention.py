@@ -71,6 +71,7 @@ while True:
     if drone_dernierEtat != drone.etat:
         drone_dernierEtat = drone.etat
         if drone.etat == 'SEGMENT':
+            print('un nouveau segment')
             parcours = resDrone['segment']
             ps = ParcoursSegment(drone,parcours['points'],parcours['boucleFermee'])
             ps.start()
@@ -87,7 +88,7 @@ while True:
             drone.RTLandFinish()
     time.sleep(5)
 
-goto1 = LocationGlobalRelative(position[0], position[1]+0.0005, 20)
+"""goto1 = LocationGlobalRelative(position[0], position[1]+0.0005, 20)
 goto2 = LocationGlobalRelative(position[0]+0.0006, position[1]-0.0010, 20)
 drone.arm_and_takeoff(20)
 
@@ -100,7 +101,7 @@ while True:
     drone.aller_a(goto2)
     drone.attente_arrivee(goto2)
     print drone.getGPSCoordonate()
-    # drone.notifier_serveur_position()
+    # drone.notifier_serveur_position()"""
 
 
 if sitl is not None:

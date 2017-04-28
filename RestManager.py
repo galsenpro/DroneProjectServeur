@@ -12,32 +12,38 @@ def get_interventions():
 def post_position(value):
     try:
         requests.post(pathRest+'positiondrone',data = value)
-        print "post_position: ", pathRest,' positiondrone ',value
+        #print "post_position: ", pathRest,' positiondrone ',value
     except Exception as e:
-        print "Error sending position"
+        print("Error sending position")
 
 def get_drone(id_intervention):
     try:
         res = requests.get(pathRest+'drones/'+id_intervention+'/intervention')
+        if res.status_code != 200:
+            create_drone(id_intervention)
         return res.json()
     except Exception as e:
         return None
 
 def create_drone(id_intervention):
     value = {}
+    value['_id'] = 'test'
     value['idIntervention'] = id_intervention
     value['etat'] = 'STOP'
-    requests.post(pathRest+'drones',data = value)
+    print(value)
+    print(pathRest+'drones')
+    res = requests.post(pathRest+'drones',data = value)
+    return res
 
 def post_positionParam(position, id_intervention):
     try:
         value = {}
         value['idIntervention'] = id_intervention
         value['position'] = [position.lat, position.lon]
-        print "Sending drone position ", position
+        #print "Sending drone position ", position
         requests.post(pathRest+'positiondrone',data = value)
     except Exception as e:
-        print "Error sending position"
+        print("Error sending position")
 
 def post_photoParam(position, dateheure, nom, path, positionPTS, id_intervention):
     try:
@@ -48,6 +54,12 @@ def post_photoParam(position, dateheure, nom, path, positionPTS, id_intervention
         value['path'] = [path]
         value['positionPTS'] = [positionPTS[0],positionPTS[1]]
         value['idintervention'] = [id_intervention]
-        requests.post(pathRest + 'photo', data=value)
+        requests.post(pathRest + 'photosdrone', data=value)
     except Exception as e:
-        print "Error sending position"
+        print("Error sending photo")
+
+def post_photo(value):
+    try:
+        requests.post(pathRest + 'photosdrone', data=value)
+    except Exception as e:
+        print("Error sending photo")

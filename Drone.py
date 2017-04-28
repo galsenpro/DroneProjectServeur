@@ -2,9 +2,8 @@ from dronekit import connect, VehicleMode,LocationGlobalRelative
 import time
 import math
 import RestManager as RM
-from threading import Thread,Event
 from pymavlink.mavutil import mavlink
-#from GetAndSendPictures.DronePicture import DronePicture
+from GetAndSendPictures.DronePicture import DronePicture
 
 
 class Drone():
@@ -17,7 +16,7 @@ class Drone():
         self.positionIntervention = positionIntervention
         self.destination = positionIntervention
         # camera
-        #self.camera = DronePicture()
+        self.camera = DronePicture()
 
     def set_intervention(self,id_intervention):
         self.id_intervention = id_intervention
@@ -93,7 +92,7 @@ class Drone():
         self.drone.close()
 
     def attente_arrivee(self,destination):
-        while get_distance_metres(self.getGPSCoordonate(),LocationGlobalRelative(destination[0],destination[1]))>1:
+        while get_distance_metres(self.getGPSCoordonate(),destination)>1:
             time.sleep(1)
         print('arrivee a destination :'+str(destination))
 
@@ -108,13 +107,14 @@ class Drone():
 
     def prendre_photo(self):
         photo = self.camera.getPicture(Intervention = self.id_intervention)
-        photo['position'] = self.getGPSCoordonate()
+        position = self.getGPSCoordonate()
+        photo['position'] = [position.lat,position.lon]
         photo['id_intervention'] = self.id_intervention
-        photo['positionPTS'] = self.destination
+        photo['positionPTS'] = [self.destination.lat,self.destination.lon]
         RM.post_photo(photo)
 
     def prendre_video(self):
-        self.camera.makeVideoDrone()
+        self.camera.makeVideoDrone(Intervention= self.id_intervention)
 
 
 def get_distance_metres(aLocation1, aLocation2):
