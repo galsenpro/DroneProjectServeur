@@ -4,7 +4,7 @@ import math
 import RestManager as RM
 from threading import Thread,Event
 from pymavlink.mavutil import mavlink
-from GetAndSendPictures.DronePicture import DronePicture
+#from GetAndSendPictures.DronePicture import DronePicture
 
 
 class Drone():
@@ -17,7 +17,7 @@ class Drone():
         self.positionIntervention = positionIntervention
         self.destination = positionIntervention
         # camera
-        self.camera = DronePicture()
+        #self.camera = DronePicture()
 
     def set_intervention(self,id_intervention):
         self.id_intervention = id_intervention
