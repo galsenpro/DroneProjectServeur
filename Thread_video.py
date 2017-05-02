@@ -9,7 +9,6 @@ class ThreadVideo(Thread):
         self.refresh = refresh
 
     def run(self):
-        id_inter = self.drone.id_intervention
         while not self._stopevent.isSet():
             self.drone.prendre_video()
             self._stopevent.wait(self.refresh)

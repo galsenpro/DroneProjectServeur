@@ -1,0 +1,11 @@
+# package à installer pour piloter le drone
+# commandes drone
+dronekit
+# simulateur de drone
+dronekit-sitl
+# requete HTTP
+requests
+# capture d'écran
+gtk
+# géométrie
+sympy

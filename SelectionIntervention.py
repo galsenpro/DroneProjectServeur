@@ -42,7 +42,7 @@ var = raw_input("\n\r\nNuméro de l'intervention à sélectionner: ")
 
 idIntervention = interventions[int(var)]["_id"]
 position = interventions[int(var)]["position"]
-#print position
+#print idIntervention
 
 #Start SITL if no connection string specified
 sitl = None
@@ -59,9 +59,9 @@ print 'Connecting to vehicle on: %s' % connection_string
 drone = Drone(connection_string, id_intervention=idIntervention)
 
 #démarage du tread d'update de position
-tetat = Thread_position(drone)
+"""tetat = Thread_position(drone)
 print('script start')
-tetat.start()
+tetat.start()"""
 
 tvideo = ThreadVideo(drone)
 tvideo.start()
@@ -110,5 +110,5 @@ while True:
 if sitl is not None:
     sitl.stop()
     print('script stop')
-    tetat.stop()
+    #tetat.stop()
     tvideo.stop()

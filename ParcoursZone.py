@@ -1,104 +1,128 @@
-from dronekit import Vehicle,LocationGlobalRelative,Command
-from pymavlink.mavutil import mavlink
-class DroneZone():
-    # Hypothèse : zone concave
-    contour = set() #
-    d = 0
+# -*- coding: utf-8 -*-
+from threading import Thread,Event
+from sympy.geometry import Point,Polygon
 
-    def __init__(self,contour,d = 10):
-        self.contour = contour
-        self.vertices = []
-        self.d = d
-        self.switch = True
-        self.nord = 1
+import math
+import RestManager as RM
+"""from Drone import Drone
+import time
+import dronekit_sitl"""
 
-    def point_ouest(self):
-        #retourner le point de contour "le plus à gauche et en haut"
-        res = self.contour[0]
-        for point in self.contour[1:]:
-            if point[0]<res[0]:
-                res = point
-        return res
+class ParcoursZone(Thread):
+    # Hypothèse : zone convexe
 
-    def point_est(self):
-        #retourner le point de contour "le plus à droite" --> retour au départ
-        res = self.contour[0]
-        for point in self.contour[1:]:
-            if point[0]>res[0]:
-                res = point
-        return res
+    def __init__(self,drone,zone,pas = 10):
+        super(ParcoursZone,self).__init()
+        self.drone = drone
+        sommets = lister_sommets(zone)
+        cotes = generer_cotes(sommets)
+        if not cotes.is_convex():
+            print 'zone non convexe'
+            #raise Exception
+        self.points = generer_parcours(cotes,sommets,pas)
+        print(self.points)
+        self._stopevent = Event()
 
-    def suivre_contour(self,ptA):
-        #suivre un contour à partir de ptA sur une distance d
-        #trouver le contour à suivre
-        absx = ptA[0]
-        dep =
-        #TODO
+    def run(self):
+        parcours = [idx for idx in range(0,len(self.points))]
+        while not self._stopevent.isSet():
+            point = self.points[parcours[count]]
+            self.drone.aller_a(point, None)
+            self.drone.attente_arrivee(point)
+            count += 1
+            if count == len(parcours):
+                count = 0
+        print "demande d'arrêt"
 
-    def coef_directeur(self,pt):
-        x = pt[0]
-        y = pt[1]
-        #
-        for points in self.contour:
-    def suivre_meridien(self,ptA,dir=1):
-        #suivre un méridien vers le nord (dir=1) ou le sud (dir=-1)
-        #TODO
-
-    def intersection_meridien_contour(self,position):
-        #retourne l'intersection entre le suivi de méridien et le contour
-        if self.nord == 1:
+    def stop(self):
+        self._stopevent.set()
 
 
+def lister_sommets(sommets):
+    res = []
+    for point in sommets:
+        res.append(Point(point))
+    return res
 
-    def attendre_parcours(self,drone,ptB):
-        #attendre arrivée du drone à ptB
-        while drone.get_distance_metres(drone.getGPSCoordonate,ptB)>1:
-            pass
-        return
 
-    def changer_switch(self):
-        if self.switch:
-            self.switch == False
+def generer_cotes(sommets):
+    return Polygon(sommets)
+
+
+def retourner_plus_grand_cote(cotes):
+    #cotes = Polygon.sides
+    ma = max([s.length for s in cotes])
+    for seg in cotes:
+        if seg.length == ma:
+            return seg
+
+
+def retourner_point_oppose(cote,sommets):
+    ma = max([cote.distance(point) for point in sommets])
+    for sommet in sommets:
+        if cote.distance(sommet) == ma:
+            return sommet,ma
+
+
+def translater_parallele(ligne,direction,pas):
+    angle = math.atan(direction)
+    x = pas*math.cos(angle)
+    y = pas*math.sin(angle)
+    ligne.translate(x,y)
+
+
+def retourner_intersections(ligne,polygone):
+    return polygone.intersection(ligne)
+
+
+def generer_parcours(cotes,sommets,pas):
+    depart = retourner_plus_grand_cote(cotes.sides)
+    axe_pas = depart.perpendicular_line(depart.p1).slope
+    fin,ma = retourner_point_oppose(depart,sommets)
+    d = pas
+    parcours = [depart.p1,depart.p2]
+    dernier_point = parcours[-1]
+    line = depart.parallel_line(depart.p1)
+    while d < ma:
+        # tracer un parallèle à départ à distance d
+        translater_parallele(line,axe_pas,pas)
+        inter = retourner_intersections(line,sommets)
+        if len(inter)==0:
+            print "Oh oh, pas d'intersection"
+            #raise Exception
+        if dernier_point.distance(inter[0]) < dernier_point.distance(inter[1]):
+            parcours.append(inter[0])
+            parcours.append(inter[1])
+            dernier_point = inter[1]
         else:
-            self.switch == True
-
-    def changer_sens(self):
-        if self.nord == 1:
-            self.nord == -1
-        else:
-            self.nord == 1
-
-    def parcourir_zone(self,drone):
-        #drone : VehiculeManager
-        #se déplacer vers le point de départ
-        pt_depart = self.point_ouest()
-        pt_arrivee = self.point_est()
-        while drone.etat == 'zone':
-            drone.goTo(pt_depart)
-            self.attendre_parcours(drone,pt_depart)
-            self.switch = True
-            while drone.get_distance_metres(drone.getGPSCoordonate(),pt_arrivee) > 1:
-                if self.switch:
-                    #suivre contour
-                    self.suivre_contour(drone.getGPSCoordonate())
-                    self.changer_switch()
-                else:
-                    #suivre meridien dans le sens de self.nord
-                    self.suivre_meridien(drone.getGPSCoordonate(),self.nord)
-                    self.changer_sens()
-                    self.changer_switch()
+            parcours.append(inter[1])
+            parcours.append(inter[0])
+            dernier_point = inter[0]
+        d += pas
+    parcours.append(fin)
+    return parcours
 
 
+if __name__ == 'main':
+    id_intervention = '590359d44cd5ba2ce8795578'
+    position = [50.1115921388017,8.677800446748732]
 
 
+    # démarage du tread SITL avec comme position
+    """sitl = dronekit_sitl.start_default(position[0], position[1] + 0.0005)
+    connection_string = sitl.connection_string()
 
-drone = Vehicle()
-points = []
-points.append(LocationGlobalRelative(-5,5))
-points.append(LocationGlobalRelative(-5,-6))
-points.append(LocationGlobalRelative(-10,-8))
-drone.simple_goto()
+    drone = Drone(connection_string, id_intervention=id_intervention)"""
+    res = RM.get_drone(id_intervention)
+    zone = res['zone']
+    print "zone : ",zone
+    sommets = lister_sommets(zone['contours'])
+    print "sommets : ",sommets
+    cotes = generer_cotes(sommets)
+    parcours = generer_parcours(cotes, sommets, 0.01)
+    print "parcours : ",parcours
 
-cmds = drone.commands
-cmd = Command()
-link = mavlink.MAV_CMD_NAV_
+    """pz = ParcoursZone(drone,zone['contours'],0.01)
+    pz.start()
+    time.sleep(120)
+    pz.stop()"""

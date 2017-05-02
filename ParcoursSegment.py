@@ -1,9 +1,11 @@
 #-*- coding: utf-8 -*-
+from threading import Thread,Event
+# lib test
 from Drone import Drone
 #from Thread_position import Thread_position
 from Thread_video import ThreadVideo
 from dronekit import LocationGlobalRelative
-from threading import Thread,Event
+
 import time
 
 class ParcoursSegment(Thread):
@@ -11,7 +13,7 @@ class ParcoursSegment(Thread):
     def __init__(self,drone,points,boucle_fermee = False):
         super(ParcoursSegment,self).__init__()
         self.drone = drone
-        self.points = points
+        self.points = [LocationGlobalRelative(point[0],point[1]) for point in points]
         self.boucle_fermee = boucle_fermee
         self._stopevent = Event()
 
