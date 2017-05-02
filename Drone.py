@@ -37,6 +37,7 @@ class Drone():
     def aller_a(self,point,groundspeed=10):
         if isinstance(point,LocationGlobalRelative):
             self.destination = point
+            self.destination.alt = 20
         else:
             self.destination = LocationGlobalRelative(point[0],point[1],20)
         #print(str(self.destination))

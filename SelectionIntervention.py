@@ -59,18 +59,19 @@ print 'Connecting to vehicle on: %s' % connection_string
 drone = Drone(connection_string, id_intervention=idIntervention)
 
 #démarage du tread d'update de position
-"""tetat = Thread_position(drone)
+tetat = Thread_position(drone)
 print('script start')
-tetat.start()"""
+tetat.start()
 
-tvideo = ThreadVideo(drone)
-tvideo.start()
+#tvideo = ThreadVideo(drone)
+#tvideo.start()
 drone_dernierEtat = "STOP"
 #thread de parcours (Segment ou Zone)
 ps = None
 while True:
     resDrone = RM.get_drone(drone.id_intervention)
-    drone.set_etat(resDrone['etat'])
+    if resDrone:
+        drone.set_etat(resDrone['etat'])
     if drone_dernierEtat != drone.etat:
         drone_dernierEtat = drone.etat
         if drone.etat == 'SEGMENT':
@@ -110,5 +111,5 @@ while True:
 if sitl is not None:
     sitl.stop()
     print('script stop')
-    #tetat.stop()
-    tvideo.stop()
+    tetat.stop()
+    #tvideo.stop()

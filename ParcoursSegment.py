@@ -26,7 +26,7 @@ class ParcoursSegment(Thread):
         count = 0
         while not self._stopevent.isSet():
             point = self.points[parcours[count]]
-            self.drone.aller_a(point,None)
+            self.drone.aller_a(point)
             self.drone.attente_arrivee(point)
             self.drone.orienter_vers_nord()
             self.drone.prendre_photo()
