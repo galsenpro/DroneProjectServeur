@@ -6,6 +6,7 @@ import RestManager as RM
 from dronekit import LocationGlobalRelative
 from Drone import Drone
 from ParcoursSegment import ParcoursSegment
+from ParcoursZoneRandom import DroneZoneRandom
 
 #recup des différentes interventions
 from Thread_position import Thread_position
@@ -64,12 +65,14 @@ tetat = Thread_position(drone)
 print('script start')
 tetat.start()
 
-#tvideo = ThreadVideo(drone)
-#tvideo.start()
+# tvideo = ThreadVideo(drone)
+# tvideo.start()
 drone_dernierEtat = "STOP"
 #thread de parcours (Segment ou Zone)
 ps = None
 while True:
+
+    print('.')
     resDrone = RM.get_drone(drone.id_intervention)
     if resDrone:
         drone.set_etat(resDrone['etat'])
@@ -81,15 +84,21 @@ while True:
             ps = ParcoursSegment(drone,parcours['points'],parcours['boucleFermee'])
             ps.start()
         if drone.etat == 'ZONE':
-            pass
+            print('une nouvelle zone')
+            zone = resDrone['zone']
+            ps = DroneZoneRandom(drone, zone['contours'])
+            ps.start()
             # demarer un thread pour la zone
         if drone.etat == 'STOP':
+            print('STOP')
             if ps:
-                ps.stop()
+                if ps != None:
+                    ps.stop()
                 print('fin de parcours')
-            #drone.aller_a(drone.getGPSCoordonate())
+            drone.aller_a(drone.getGPSCoordonateRelatif())
             # stopper les thread zone et segment
         if drone.etat == 'PARKING':
+            print('PARKING')
             drone.RTLandFinish()
     time.sleep(5)
 

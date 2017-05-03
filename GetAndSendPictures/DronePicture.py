@@ -6,7 +6,7 @@ import errno
 import sys
 import gtk.gdk
 import chilkat
-
+import Image
 class DronePicture:
     """
     Prise de Photos --> Transmission vers le Server Apache
@@ -50,6 +50,30 @@ class DronePicture:
                             raise
                 #Sauvegarde de la photo prise avec l'extension indiquée
                 pb.save(filename, str(Extension))
+
+                """
+                Découpage de la photo de -10% des marges
+                """
+                im = Image.open(str(filename))
+                im_size = im.size
+                #print im_size
+                # (1366, 768)
+                cp_large = (im_size[0] * 0.10)
+                cp_haut = (im_size[1] * 0.10)
+                #print cp_large
+                #print cp_haut
+                left = cp_large
+                top = cp_haut
+                width = im_size[0] - cp_large
+                height = im_size[1] - cp_haut
+                # Create Box
+                box = (left, top, left + width, top + height)
+                # Crop Image
+                area = im.crop(box)
+                area.show()
+                # Save Image
+                print area.size
+                area.save(filename, str(Extension))
                 value["path"] = 'http://148.60.11.238/projet/'+suffix
                 value["date_heure"] = datepicture
                 value["nom"] = NamePicture
@@ -153,6 +177,29 @@ class DronePicture:
                 # Sauvegarde de la photo prise avec l'extension indiquée
                 pb.save(filename, str(Extension))
                 print "Video saved to " + os.path.basename(filename)
+                """
+                Découpage de la vidéo de -10% des marges
+                """
+                im = Image.open(str(filename))
+                im_size = im.size
+                #print im_size
+                # (1366, 768)
+                cp_large = (im_size[0] * 0.10)
+                cp_haut = (im_size[1] * 0.10)
+                #print cp_large
+                #print cp_haut
+                left = cp_large
+                top = cp_haut
+                width = im_size[0] - cp_large
+                height = im_size[1] - cp_haut
+                # Create Box
+                box = (left, top, left + width, top + height)
+                # Crop Image
+                area = im.crop(box)
+                area.show()
+                # Save Image
+                print area.size
+                area.save(filename, str(Extension))
                 self.sendToTheServer(filename, suffix)
             else:
                 print "Unable to get the Video."
