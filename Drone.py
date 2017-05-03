@@ -7,8 +7,8 @@ from GetAndSendPictures.DronePicture import DronePicture
 import google_earth_fly_link_file
 
 class Drone():
-
-    def __init__(self,connection_string = 'tcp:127.0.0.1:5760',altitude = 20,id_intervention = "", positionIntervention = [40.76793169992044, -73.98180484771729]):
+    # tcp:127.0.0.1:5760
+    def __init__(self,connection_string = '/dev/ttyUSB1',altitude = 20,id_intervention = "", positionIntervention = [40.76793169992044, -73.98180484771729]):
         self.drone = connect(connection_string, wait_ready = True, baud = 57600)
         self.arm_and_takeoff(altitude)
         self.set_etat('STOP')
@@ -66,12 +66,10 @@ class Drone():
         # Wait until the vehicle reaches a safe height before processing the goto (otherwise the command
         #  after Vehicle.simple_takeoff will execute immediately).
         while True:
-            """print
-            " Altitude: ", vehicule.location.global_relative_frame.alt"""
+            print " Altitude: ", self.drone.location.global_relative_frame.alt
             # Break and return from function just below target altitude.
             if self.drone.location.global_relative_frame.alt >= aTargetAltitude * 0.95:
-                """print
-                "Reached target altitude"""""
+                print "Reached target altitude"
                 break
             time.sleep(1)
 

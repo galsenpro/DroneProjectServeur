@@ -64,8 +64,8 @@ tetat = Thread_position(drone)
 print('script start')
 tetat.start()
 
-#tvideo = ThreadVideo(drone)
-#tvideo.start()
+tvideo = ThreadVideo(drone)
+tvideo.start()
 drone_dernierEtat = "STOP"
 #thread de parcours (Segment ou Zone)
 ps = None
@@ -87,7 +87,7 @@ while True:
             if ps:
                 ps.stop()
                 print('fin de parcours')
-            #drone.aller_a(drone.getGPSCoordonate())
+            drone.aller_a(drone.getGPSCoordonateRelatif())
             # stopper les thread zone et segment
         if drone.etat == 'PARKING':
             drone.RTLandFinish()
