@@ -7,6 +7,7 @@ import sys
 import gtk.gdk
 import chilkat
 import Image
+
 class DronePicture:
     """
     Prise de Photos --> Transmission vers le Server Apache
@@ -58,8 +59,8 @@ class DronePicture:
                 im_size = im.size
                 #print im_size
                 # (1366, 768)
-                cp_large = (im_size[0] * 0.10)
-                cp_haut = (im_size[1] * 0.10)
+                cp_large = int(im_size[0] * 0.10)
+                cp_haut = int(im_size[1] * 0.10)
                 #print cp_large
                 #print cp_haut
                 left = cp_large
@@ -70,16 +71,15 @@ class DronePicture:
                 box = (left, top, left + width, top + height)
                 # Crop Image
                 area = im.crop(box)
-                area.show()
                 # Save Image
-                print area.size
+                #print area.size
                 area.save(filename, str(Extension))
                 value["path"] = 'http://148.60.11.238/projet/'+suffix
                 value["date_heure"] = datepicture
                 value["nom"] = NamePicture
                 print "Screenshot saved to " + os.path.basename(filename)
                 self.sendToTheServer(filename, suffix)
-                print(value)
+                #print(value)
                 return value
             else:
                 print "Unable to get the screenshot."
@@ -140,17 +140,6 @@ class DronePicture:
         ssh.Disconnect()
 
     """
-        Notification de NodeJS sur l'objet Photo
-    """
-    def notifyNodeJS(self):
-        try:
-            print("Notifying NodeJS for new Photo Object ...")
-
-        except Exception as x:
-            print(x)
-
-
-    """
         Fonction de capture du flux Vidéo - TODO
     """
     def makeVideoDrone(self, VideoName = "VideoDrone", Intervention = 1, Extension = "jpeg"):
@@ -184,8 +173,8 @@ class DronePicture:
                 im_size = im.size
                 #print im_size
                 # (1366, 768)
-                cp_large = (im_size[0] * 0.10)
-                cp_haut = (im_size[1] * 0.10)
+                cp_large = int(im_size[0] * 0.10)
+                cp_haut = int(im_size[1] * 0.10)
                 #print cp_large
                 #print cp_haut
                 left = cp_large
@@ -196,7 +185,6 @@ class DronePicture:
                 box = (left, top, left + width, top + height)
                 # Crop Image
                 area = im.crop(box)
-                area.show()
                 # Save Image
                 print area.size
                 area.save(filename, str(Extension))

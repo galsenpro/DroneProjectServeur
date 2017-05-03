@@ -17,7 +17,7 @@ kml_template = '''<?xml version="1.0" encoding="UTF-8"?>
       <altitude>{altitude}</altitude>
       <heading>{heading}</heading>
       <tilt>{tilt}</tilt>
-      <altitudeMode>absolute</altitudeMode>
+      <altitudeMode>relativeToGround</altitudeMode>
     </Camera>
   </Document>
 </kml>'''
@@ -56,8 +56,8 @@ now = time.time()
 def GenerateKML(longitude,latitude,altitude,heading,tilt):
     coord['longitude'] = longitude
     coord['latitude'] = latitude
-    coord['altitude'] = altitude+30
-    #coord['altitude'] = 150
+    #coord['altitude'] = altitude+30
+    coord['altitude'] = 30
     coord['heading'] = heading/3.14*360
     coord['tilt'] = tilt/3.14*360
 
