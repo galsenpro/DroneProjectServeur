@@ -65,8 +65,8 @@ tetat = Thread_position(drone)
 print('script start')
 tetat.start()
 
-# tvideo = ThreadVideo(drone)
-# tvideo.start()
+tvideo = ThreadVideo(drone)
+tvideo.start()
 drone_dernierEtat = "STOP"
 #thread de parcours (Segment ou Zone)
 ps = None
