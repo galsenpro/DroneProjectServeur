@@ -1,6 +1,8 @@
 #-*- coding: utf-8 -*-
 from threading import Thread,Event
 # lib test
+import sys
+
 from Drone import Drone
 #from Thread_position import Thread_position
 from Thread_video import ThreadVideo
@@ -37,6 +39,7 @@ class ParcoursSegment(Thread):
 
     def stop(self):
         self._stopevent.set()
+        sys.exit(0)
 #test
 if __name__ == '__main__':
 
