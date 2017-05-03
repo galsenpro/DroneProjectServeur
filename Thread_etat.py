@@ -37,6 +37,7 @@ class Thread_etat(Thread):
         print('fin du thread')
 
     def stop(self):
+        sys.exit(0)
         self._stopevent.set()
 
 def main():
