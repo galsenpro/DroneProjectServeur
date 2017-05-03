@@ -43,6 +43,7 @@ var = raw_input("\n\r\nNuméro de l'intervention à sélectionner: ")
 idIntervention = interventions[int(var)]["_id"]
 position = interventions[int(var)]["position"]
 #print idIntervention
+print position
 
 #Start SITL if no connection string specified
 sitl = None
@@ -56,8 +57,8 @@ connection_string = sitl.connection_string()
 print 'Connecting to vehicle on: %s' % connection_string
 
 #connexion au drone
-drone = Drone(connection_string, id_intervention=idIntervention)
-
+drone = Drone(connection_string, id_intervention=idIntervention,positionIntervention=[position[0],position[1]+0.0005])
+print drone.getGPSCoordonate()
 #démarage du tread d'update de position
 tetat = Thread_position(drone)
 print('script start')

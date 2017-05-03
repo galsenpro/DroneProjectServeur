@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 from threading import Thread,Event
-from sympy.geometry import Point,Polygon
+from sympy.geometry import *
 
 import math
 import RestManager as RM
-"""from Drone import Drone
+from Drone import Drone
 import time
-import dronekit_sitl"""
+import dronekit_sitl
 
 class ParcoursZone(Thread):
     # Hypothèse : zone convexe
@@ -17,7 +17,7 @@ class ParcoursZone(Thread):
         sommets = lister_sommets(zone)
         cotes = generer_cotes(sommets)
         if not cotes.is_convex():
-            print 'zone non convexe'
+            print('zone non convexe')
             #raise Exception
         self.points = generer_parcours(cotes,sommets,pas)
         print(self.points)
@@ -32,7 +32,7 @@ class ParcoursZone(Thread):
             count += 1
             if count == len(parcours):
                 count = 0
-        print "demande d'arrêt"
+        print("demande d'arrêt")
 
     def stop(self):
         self._stopevent.set()
@@ -46,7 +46,14 @@ def lister_sommets(sommets):
 
 
 def generer_cotes(sommets):
-    return Polygon(sommets)
+    res = set()
+    a = sommets[-1]
+    for point in sommets:
+        b = point
+        res.add(Segment(a,b))
+        a = point
+    return res
+    #return Polygon(sommets)
 
 
 def retourner_plus_grand_cote(cotes):
@@ -72,11 +79,11 @@ def translater_parallele(ligne,direction,pas):
 
 
 def retourner_intersections(ligne,polygone):
-    return polygone.intersection(ligne)
+    return Polygon(polygone).intersection(ligne)
 
 
 def generer_parcours(cotes,sommets,pas):
-    depart = retourner_plus_grand_cote(cotes.sides)
+    depart = retourner_plus_grand_cote(cotes)
     axe_pas = depart.perpendicular_line(depart.p1).slope
     fin,ma = retourner_point_oppose(depart,sommets)
     d = pas
@@ -88,8 +95,11 @@ def generer_parcours(cotes,sommets,pas):
         translater_parallele(line,axe_pas,pas)
         inter = retourner_intersections(line,sommets)
         if len(inter)==0:
-            print "Oh oh, pas d'intersection"
-            #raise Exception
+            print("Oh oh, pas d'intersection")
+            return parcours
+        if len(inter)==1:
+            parcours.append(inter[0])
+            return parcours
         if dernier_point.distance(inter[0]) < dernier_point.distance(inter[1]):
             parcours.append(inter[0])
             parcours.append(inter[1])
@@ -106,7 +116,7 @@ def generer_parcours(cotes,sommets,pas):
 if __name__ == 'main':
     id_intervention = '590359d44cd5ba2ce8795578'
     position = [50.1115921388017,8.677800446748732]
-
+    print('démarrage')
 
     # démarage du tread SITL avec comme position
     """sitl = dronekit_sitl.start_default(position[0], position[1] + 0.0005)
@@ -115,13 +125,10 @@ if __name__ == 'main':
     drone = Drone(connection_string, id_intervention=id_intervention)"""
     res = RM.get_drone(id_intervention)
     zone = res['zone']
-    print "zone : ",zone
     sommets = lister_sommets(zone['contours'])
-    print "sommets : ",sommets
     cotes = generer_cotes(sommets)
-    parcours = generer_parcours(cotes, sommets, 0.01)
-    print "parcours : ",parcours
-
+    parcours = generer_parcours(cotes,sommets,0.0001)
+    print(parcours)
     """pz = ParcoursZone(drone,zone['contours'],0.01)
     pz.start()
     time.sleep(120)

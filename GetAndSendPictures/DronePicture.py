@@ -50,7 +50,7 @@ class DronePicture:
                             raise
                 #Sauvegarde de la photo prise avec l'extension indiquée
                 pb.save(filename, str(Extension))
-                value["path"] = filename
+                value["path"] = 'http://148.60.11.238/projet/'+suffix
                 value["date_heure"] = datepicture
                 value["nom"] = NamePicture
                 print "Screenshot saved to " + os.path.basename(filename)
