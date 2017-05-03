@@ -13,6 +13,7 @@ class DroneZoneRandom(Thread):
     d = 0
 
     def __init__(self,drone=None, contour=None,d = 10):
+        super(DroneZoneRandom,self).__init__()
         self.contour = contour
         self.listeTotal = []
         self._stopevent = Event()
@@ -81,5 +82,5 @@ pointss.append(LocationGlobalRelative(6.0,6.0))
 # drone = Drone(connection_string,20,id_intervention="ididi")
 # drone.arm_and_takeoff(20)
 # drone.aller_a(LocationGlobalRelative(20, 21+0.0005), 20)
-dzr = DroneZoneRandom(pointss)
-dzr.parcourir_zone(None)
+# dzr = DroneZoneRandom(pointss)
+# dzr.parcourir_zone(None)
