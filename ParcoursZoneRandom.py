@@ -7,15 +7,16 @@ from threading import Thread,Event
 from Drone import Drone
 
 
-class DroneZoneRandom():
+class DroneZoneRandom(Thread):
     # Hypothese : zone concave
     contour = set() #
     d = 0
 
-    def __init__(self,contour=None,d = 10):
+    def __init__(self,drone=None, contour=None,d = 10):
         self.contour = contour
         self.listeTotal = []
         self._stopevent = Event()
+        self.drone = drone
         self.d = d
 
     def convertionArrayLonLat(self,contours):
@@ -34,7 +35,7 @@ class DroneZoneRandom():
             print " "+str(npts.lat)+" "+str(npts.lon)
             self.listeTotal.append(npts)
 
-    def parcourir_zone(self,drone):
+    def run(self):
         # listeinit = self.convertionArrayLonLat(self.contour)
         listeinit = self.contour
 
@@ -54,14 +55,16 @@ class DroneZoneRandom():
             position = ((position + (len(self.listeTotal)/4))+randomNumber)%len(self.listeTotal)
             print "Position "+str(position)
 
-            drone.goTo(self.listeTotal[position])
-            self.attendre_parcours(drone,self.listeTotal[position])
+            self.drone.goTo(self.listeTotal[position])
+            self.attendre_parcours(self.drone,self.listeTotal[position])
 
 
 
     def stop(self):
             self._stopevent.set()
+            self.drone.aller_a(self.drone.getGPSCoordonateRelatif())
             sys.exit(0)
+
 pointss = []
 pointss.append(LocationGlobalRelative(5.0,5.0))
 pointss.append(LocationGlobalRelative(6.0,4.0))
