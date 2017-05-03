@@ -14,7 +14,7 @@ class Drone():
         self.set_etat('STOP')
         self.id_intervention = id_intervention
         self.positionIntervention = positionIntervention
-        self.destination = positionIntervention
+        self.destination = LocationGlobalRelative(positionIntervention[0],positionIntervention[1],20)
         # camera
         self.camera = DronePicture()
 
@@ -108,9 +108,9 @@ class Drone():
     def prendre_photo(self):
         photo = self.camera.getPicture(Intervention = self.id_intervention)
         position = self.getGPSCoordonate()
-        photo['position'] = [position.lat,position.lon]
+        photo['position'] = [float(position.lat),float(position.lon)]
         photo['idIntervention'] = self.id_intervention
-        photo['positionPTS'] = [self.destination.lat,self.destination.lon]
+        photo['positionPTS'] = [float(self.destination.lat),float(self.destination.lon)]
         RM.post_photo(photo)
 
     def prendre_video(self):

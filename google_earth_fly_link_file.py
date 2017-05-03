@@ -56,7 +56,7 @@ now = time.time()
 def GenerateKML(longitude,latitude,altitude,heading,tilt):
     coord['longitude'] = longitude
     coord['latitude'] = latitude
-    coord['altitude'] = altitude+20
+    coord['altitude'] = altitude+30
     #coord['altitude'] = 150
     coord['heading'] = heading/3.14*360
     coord['tilt'] = tilt/3.14*360
