@@ -24,12 +24,12 @@ def post_position(value):
 def get_drone(id_intervention):
     try:
         res = requests.get(pathRest+'drones/'+id_intervention+'/intervention')
-        print "==: ", res, " : ", res.status_code
+        #print "==: ", res, " : ", res.status_code
         if res.status_code == 404:
             print "404"
             return None
         elif res.status_code == 200:
-            print "200"
+            #print "200"
             return res.json()
     except Exception as e:
         return None

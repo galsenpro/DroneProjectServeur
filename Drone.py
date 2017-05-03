@@ -109,7 +109,7 @@ class Drone():
         photo = self.camera.getPicture(Intervention = self.id_intervention)
         position = self.getGPSCoordonate()
         photo['position'] = [position.lat,position.lon]
-        photo['id_intervention'] = self.id_intervention
+        photo['idIntervention'] = self.id_intervention
         photo['positionPTS'] = [self.destination.lat,self.destination.lon]
         RM.post_photo(photo)
 
@@ -117,7 +117,7 @@ class Drone():
         self.camera.makeVideoDrone(Intervention= self.id_intervention)
 
     def maj_googleearth(self):
-        position = self.getGPSCoordonate()
+        position = self.getGPSCoordonateRelatif()
         google_earth_fly_link_file.GenerateKML(position.lon,position.lat,position.alt,
                                                self.drone.attitude.yaw,self.drone.attitude.pitch)
         #print('MAJ google earth')
