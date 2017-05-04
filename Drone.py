@@ -87,7 +87,7 @@ class Drone():
 
     def RTLandFinish(self):
         self.drone.mode = VehicleMode("RTL")
-        self.drone.close()
+        #self.drone.close()
 
     def attente_arrivee(self,destination):
         while get_distance_metres(self.getGPSCoordonate(),destination) > 1:

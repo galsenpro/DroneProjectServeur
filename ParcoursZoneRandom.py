@@ -40,7 +40,6 @@ class DroneZoneRandom(Thread):
         listeinit = self.contour
         listeinit = self.convertionArrayLonLat(self.contour)
 
-
         for i in range(len(listeinit)):
             if i == len(listeinit) -1:
                 print "1"+str(i)
