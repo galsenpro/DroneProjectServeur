@@ -13,7 +13,6 @@ class Drone():
         self.arm_and_takeoff(altitude)
         self.set_etat('STOP')
         self.id_intervention = id_intervention
-        self.positionIntervention = positionIntervention
         self.destination = LocationGlobalRelative(positionIntervention[0],positionIntervention[1],20)
         # camera
         self.camera = DronePicture()
@@ -91,7 +90,6 @@ class Drone():
         self.drone.close()
 
     def attente_arrivee(self,destination):
-        #while get_distance_metres(self.getGPSCoordonate(),LocationGlobalRelative(destination[0],destination[1]))>1:
         while get_distance_metres(self.getGPSCoordonate(),destination) > 1:
             time.sleep(1)
         print('arrivee a destination :'+str(destination))
