@@ -21,7 +21,7 @@ class DroneZoneRandom(Thread):
         self.d = d
 
     def convertionArrayLonLat(self,contours):
-        liste = None
+        liste = []
         for point in contours:
             liste.append(LocationGlobalRelative(point[0],point[1]))
         return liste
@@ -37,8 +37,9 @@ class DroneZoneRandom(Thread):
             self.listeTotal.append(npts)
 
     def run(self):
-        # listeinit = self.convertionArrayLonLat(self.contour)
         listeinit = self.contour
+        listeinit = self.convertionArrayLonLat(self.contour)
+
 
         for i in range(len(listeinit)):
             if i == len(listeinit) -1:
@@ -56,15 +57,15 @@ class DroneZoneRandom(Thread):
             position = ((position + (len(self.listeTotal)/4))+randomNumber)%len(self.listeTotal)
             print "Position "+str(position)
 
-            self.drone.goTo(self.listeTotal[position])
-            self.attendre_parcours(self.drone,self.listeTotal[position])
+            print "Going to"
+            self.drone.aller_a(self.listeTotal[position])
+            self.drone.attente_arrivee(self.listeTotal[position])
 
 
 
     def stop(self):
             self._stopevent.set()
             self.drone.aller_a(self.drone.getGPSCoordonateRelatif())
-            sys.exit(0)
 
 pointss = []
 pointss.append(LocationGlobalRelative(5.0,5.0))

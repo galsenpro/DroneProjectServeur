@@ -40,7 +40,6 @@ class ParcoursSegment(Thread):
     def stop(self):
         self._stopevent.set()
         self.drone.aller_a(self.drone.getGPSCoordonateRelatif())
-        sys.exit(0)
 #test
 if __name__ == '__main__':
 
